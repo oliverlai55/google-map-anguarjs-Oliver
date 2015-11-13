@@ -1,0 +1,18 @@
+/* line 1, ../compass/sass/header.scss */
+.main {
+  background: blue;
+}
+
+/* line 6, ../compass/sass/header.scss */
+.container {
+  font-size: 14px;
+}
+/* line 8, ../compass/sass/header.scss */
+.container li {
+  list-style: none;
+  font-size: 15px;
+}
+/* line 11, ../compass/sass/header.scss */
+.container li a {
+  text-decoration: none;
+}
