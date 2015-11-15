@@ -38,24 +38,32 @@ var mapctl = angular.module('myApp',[]).controller('mapCtrl', function($scope){
 			icon: icon
 		});
 
-        markerContentHTML = '<div class="infoWindowContent">';
+	var weatherURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city.city+ ",us,ga&units=imperial&APPID=0b66f0f8e1b5e15a5b59581c421348aa";
+	$.getJSON(weatherURL, function(weatherData){
+		var weatherIconURL = 'http://openweathermap.org/img/w/'
+		var weatherIcon = weatherIconURL + weatherData.weather[0].icon + '.png';
+
+
+        	markerContentHTML = '<div class="infoWindowContent">';
 	        markerContentHTML += '<div class="total-pop">Total Population: ' + city.yearEstimate + '</div>';
     	    markerContentHTML += '<div class="pop-dens-last-year">2010 Census: ' + city.lastCensus + '</div>';
 	        markerContentHTML += '<div class="pop-change">Population Change %: ' + city.change + '</div>';
     	    markerContentHTML += '<div class="pop-dens">Population Density: ' + city.lastPopDensity + '</div>';
         	markerContentHTML += '<div class="state">State: ' + city.state + '</div>';
         	markerContentHTML += '<div class="land-area">Land Area: ' + city.landArea + '</div>';
+        	markerContentHTML += '<div class ="weather"><img src="'+weatherIcon+'">Current Temperature: '+weatherData.main.temp+'&degF</div>';
         	markerContentHTML += '<div><a href="#" onclick="getDirections('+lat+','+lon+')">Get directions</a></div>';
         	markerContentHTML += '<div><a href="#" onclick="zoomOnCity('+lat+','+lon+')">Show me the courses!</a></div>';
         markerContentHTML += '</div>';
 
         marker.content = markerContentHTML;
+        console.log(marker.content);
 
         google.maps.event.addListener(marker, 'click', function(){
         	infoWindow.setContent('<h2>' + marker.title + '</h2>' + marker.content);
         	infoWindow.open($scope.map, marker);
         });
-
+		});
         $scope.markers.push(marker);
 
 	}
@@ -90,6 +98,7 @@ var infoWindow = new google.maps.InfoWindow()
     		$scope.resetMap();
         google.maps.event.trigger($scope.markers[i-1],"click");
     }
+    console.log(triggerClick());
 
     $scope.updateMarkers = function(){
     	for(i=0; i < $scope.markers.length; i++){
@@ -160,6 +169,7 @@ var infoWindow = new google.maps.InfoWindow()
 
 	function createPointOfInterestMarker(place){
 		console.log(place);
+
 		var placeLoc = place.geometry.location;
 		var marker = new google.maps.Marker({
 	 		map: map,
@@ -173,10 +183,11 @@ var infoWindow = new google.maps.InfoWindow()
 				photo = '<img src="' + place.photos[0].getUrl({'maxWidth': 150, 'maxHeight': 100})+'">';
 			}
 			var placeHTML = '<div class="location-image">' + photo + '</div>';
-			placeHTML += '<h5>' + place.vicinity + '</h6>';
+			placeHTML += '<h5>' + place.vicinity + '</h5>';
 			place.content = placeHTML;
 	 		infowindow.setContent('<h2>'+place.name + '</h2>' + place.content);
 	 		infowindow.open(map, this);
+	 		console.log(place.vicinity);
   		});
 	}
 
@@ -185,8 +196,6 @@ var infoWindow = new google.maps.InfoWindow()
 		createMarker(cities[i],i)
 	}
 });
-
-
 
 
 
