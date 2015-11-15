@@ -20,6 +20,7 @@
 		<form ng-submit="updateMarkers(searchString)">
 			<input id="filter-input" ng-model="searchString" type="text">
 			<input type="submit" value="Update map">
+			<button type="button" class="btn btn-danger btn-sm" ng-click="resetMap()">Reset Map</button>
 			<div class="city" ng-repeat="city in (filteredCities = (cities | filter: searchString))">
 					<!-- {{city.yearRank}}: {{city.city}} -->
 				<a class="btn btn-primary sm" href="" ng-click="triggerClick(city.yearRank)">

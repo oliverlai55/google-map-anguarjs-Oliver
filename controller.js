@@ -60,8 +60,34 @@ var mapctl = angular.module('myApp',[]).controller('mapCtrl', function($scope){
 
 	}
 
+var createCityMarkers = function(){
+	$scope.cities = cities
+    for( i=0; i < cities.length; i++){
+    	createMarker(cities[i], i)
+    }
+}
+
+$scope.resetMap = function(){
+		var mapOptions = {
+			zoom: 4,
+		//Center of the US
+		center: new google.maps.LatLng(40.0000, -98.0000)
+	}
+
+	$scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+	$scope.markers = [];
+
+	createCityMarkers();
+}
+
+$scope.resetMap();
+
+var infoWindow = new google.maps.InfoWindow()
+
+
     //Without scope... the view can't see it
     $scope.triggerClick = function(i){
+    		$scope.resetMap();
         google.maps.event.trigger($scope.markers[i-1],"click");
     }
 
